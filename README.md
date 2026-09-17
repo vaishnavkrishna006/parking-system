@@ -62,6 +62,13 @@ their status to the backend over Wi-Fi. Before uploading, edit the `ssid`,
 `serverName`; `localhost` will point to the ESP32 itself and will not reach the
 backend.
 
+### Prototype
+
+The assembled two-slot prototype is shown below. It includes the two ultrasonic
+sensors, OLED display, status LEDs, buzzer, and ESP32 wiring.
+
+![Smart parking hardware prototype](docs/parking-system-hardware.jpg)
+
 ### Wiring
 
 | Component | Pin or wire | ESP32 connection |
