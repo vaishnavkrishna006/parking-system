@@ -54,6 +54,57 @@ Smart Parking System/
 └── README.md              # This file
 ```
 
+## Arduino ESP32 Hardware
+
+The file `parking system.ino` monitors two parking slots with an ESP32 and sends
+their status to the backend over Wi-Fi. Before uploading, edit the `ssid`,
+`password`, and `serverName` values in the sketch. Use the computer's LAN IP in
+`serverName`; `localhost` will point to the ESP32 itself and will not reach the
+backend.
+
+### Wiring
+
+| Component | Pin or wire | ESP32 connection |
+| --- | --- | --- |
+| Slot 1 ultrasonic sensor | TRIG | GPIO 23 |
+| Slot 1 ultrasonic sensor | ECHO | GPIO 19 |
+| Slot 2 ultrasonic sensor | TRIG | GPIO 25 |
+| Slot 2 ultrasonic sensor | ECHO | GPIO 33 |
+| Slot 1 green LED | Anode through resistor | GPIO 5 |
+| Slot 1 red LED | Anode through resistor | GPIO 18 |
+| Slot 2 green LED | Anode through resistor | GPIO 14 |
+| Slot 2 red LED | Anode through resistor | GPIO 12 |
+| Buzzer | Positive | GPIO 4 |
+| SSD1306 OLED | SDA | GPIO 21 |
+| SSD1306 OLED | SCL | GPIO 22 |
+| All components | GND | ESP32 GND |
+| Sensors, LEDs, buzzer, OLED | VCC | Suitable module voltage and common ESP32 ground |
+
+Use a resistor for each LED and verify the voltage requirements of every
+module. Many HC-SR04 sensors output a 5 V ECHO signal; protect the ESP32 ECHO
+pins with a voltage divider or a 3.3 V-compatible ultrasonic sensor.
+
+### Arduino IDE Setup
+
+1. Select an ESP32 board and the correct serial port.
+2. Install `Adafruit GFX Library` and `Adafruit SSD1306` from the Library Manager.
+3. Set the Wi-Fi credentials and backend URL in `parking system.ino`.
+4. Start the backend on the same local network. The default endpoint is
+   `POST /api/parking/hardware-update` on port `5000`.
+5. Upload the sketch and open Serial Monitor at `115200` baud.
+
+The OLED and Serial Monitor show whether each slot is `OPEN` or `FULL`. A slot
+is treated as occupied when its measured distance is 10 cm or less. Every five
+seconds the ESP32 sends JSON similar to:
+
+```json
+{
+  "slot1": false,
+  "slot2": true,
+  "recommendedSlot": "SLOT 1"
+}
+```
+
 ## 🚀 Getting Started
 
 ### Prerequisites
